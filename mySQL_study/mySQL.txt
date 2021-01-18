@@ -1,0 +1,141 @@
+#mysql 실행
+$mysql -u root -p
+
+#데이터베이스 생성
+$create database myFirstDB;
+
+#데이터베이스 확인
+$show databases;
+
+#데이터베이스 사용
+$use myFirstDB
+
+#테이블 생성
+$@#create table myMember(
+    myMemberID int unsigned auto_increment,
+    userID varchar(15) not null,
+    name varchar(10) not null,
+    password varchar(30) not null,
+    phone varchar(13) not null,
+    email varchar(30) not null,
+    birthDay char(10) not null,
+    gender enum('m','w','x') default 'x',
+    regTime datetime not null,
+    primary key(myMemberID))
+    charset=utf8;
+
+$create table testTable(
+    myMemberID int unsigned auto_increment,
+    userID varchar(15) not null,
+    name varchar(10) not null,
+    password varchar(30) not null,
+    phone varchar(13) not null,
+    email varchar(30) not null,
+    birthDay char(10) not null,
+    regTime datetime not null,
+    primary key(myMemberID))
+    charset=utf8;
+
+#테이블 필드 추가하기 
+$ALTER TABLE testTable ADD gender enum('m','w','x') AFTER birthDay;
+
+#테입르 필드 수정하기
+$ALTER TABLE testTable MODIFY gender enum('m','w');
+
+#테이블 필드 삭제하기
+$ALTER TABLE testTable DROP gender;
+
+#데이블 삭제하기
+$DROP TABLE 테이블명;
+
+#테이블에 데이터입력하기
+$INSERT INTO 테이블명(입력할 필드명) VALUES(입력할 데이터);
+
+$INSERT INTO myMember(userID, name, password, phone, email, birthDay, gender, regTime)
+VALUES('whddls', '최종인', 'whddls12', '010-1234-5678', 'whddls@naver.com', '1994-10-04', 'm', 'now());
+
+#데이터 불러오기
+$SELECT 불러올 필드명 FROM 테이블명
+
+$SELECT name, gender FROM myMember
+
+#조건에 따른 데이터 불러오기
+$SELECT 불러올 필드명 FROM 테이블명 WHERE 조건
+
+$SELECT * FROM myMember WHERE myMemberID=1;
+$SELECT * FROM myMember WHERE name = '김태영'
+
+#distinct를 이용한 검색 -> 중복되는 것은 제거한다 
+$SELECT DISTINCT name FROM myMember; 
+->테이블에  "최종인"이라는 이름이 3개 존재하면  distinct를 사용하면 1개만 나옴
+
+
+#LIKE 부분 일치하는 값을 찾을때 사용 %는 모든 값을 나타냄
+$SELECT * FROM myMember WHERE name LIKE '김%'
+
+#두개 이상의 조건을 사용
+$SELECT * FROM myMember WHERE name LIKE '김%' AND gender = 'm'
+$SELECT * FROM myMember WHERE name LIKE '김%' OR gender = 'm'
+
+#데이터(레코드)의 값을 변경 
+$UPDATE 테이블명 SET 필드명 값 조건
+
+$UPDATE myMember SET phone = '010-4567-8912', userID = 'dndkd' WHERE myMemberID = 1;
+
+#데이터의 값을 삭제하기
+$DELETE FROM 테이블명 조건
+$DELETE FROM myMember WHERE myMemberID = 3;
+
+# IN절을 사용해 여러개 삭제
+$DELETE FROM myMember WHERE myMemberID IN(1,2,3);
+
+#테이블 초기화 
+$TRUNCATE 테이블명
+
+#테이블명 변경
+$ALTER TABLE 이전테이블명 RENAME 새테이블명;
+
+#테이블명 변경
+$ALTER TABLE 테이블명 CHANGE 이전필드명 새필드명 데이터형;
+
+#필드타입 변경
+$ALTER TABLE 테이블명 CHANGE 필드명 필드명 데이터형;
+
+
+#2개의 이상의 테이블 사용하기 JOIN 
+$SELECT m.name, r.content FROM myMember m JOIN Review r ON(m.myMemberID = r.myMemberID);
+
+
+CREATE TABLE schoolscore(
+studentID int(10) unsigned NOT NULL AUTO_INCREMENT,
+class tinyint unsigned,
+english tinyint unsigned NOT NULL,
+math tinyint unsigned NOT NULL,
+science tinyint unsigned NOT NULL,
+japanese tinyint unsigned NOT NULL,
+coding tinyint unsigned NOT NULL,
+PRIMARY KEY(studentID))
+CHARSET=utf8;
+
+INSERT INTO schoolscore(english, math, science, japanese, coding)
+VALUES(67,4,20,100,100);
+INSERT INTO schoolscore(class, english, math, science, japanese, coding)
+VALUES(1,55,60,80,50,100);
+INSERT INTO schoolscore(class, english, math, science, japanese, coding)
+VALUES(2,100,90,100,50,100);
+INSERT INTO schoolscore(class, english, math, science, japanese, coding)
+VALUES(2,90,86,100,70,100);
+INSERT INTO schoolscore(class, english, math, science, japanese, coding)
+VALUES(3,80,50,60,20,100);
+INSERT INTO schoolscore(class, english, math, science, japanese, coding)
+VALUES(3,100,80,70,20,80);
+INSERT INTO schoolscore(class, english, math, science, japanese, coding)
+VALUES(4,100,100,100,30,40);
+
+#레코드 개수 구하기 
+$SELECT count(*) FROM schoolscore;
+
+#모든 학생의 영어점수 합계 구하기
+$SELECT sum(english) FROM schoolscore;
+
+#1~5번 학생의 수학점수 구하기 
